@@ -1,0 +1,32 @@
+@import "./styles/variables.scss";
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  background-color: $white-1;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  box-sizing: border-box;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  background-color: $blue !important;
+  color: $white-0 !important;
+  transition: background-color 0.4s ease;
+
+  &:hover {
+    background-color: lighten($blue, 10%) !important;
+  }
+
+  &:active {
+    background-color: darken($blue, 10%) !important;
+  }
+}
