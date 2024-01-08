@@ -3,6 +3,7 @@ import { useState, FormEvent } from "react";
 import { useMutation } from "react-query";
 import axiosInstance from "../api/axios";
 import Spinner from "./Spinner";
+import { LoginResponse } from "../types/login.type";
 
 export default function Form() {
   const [email, setEmail] = useState<string>("");
@@ -12,18 +13,7 @@ export default function Form() {
   const [required, setRequired] = useState<boolean>(false);
   const [logged, setLogged] = useState<boolean>(false);
 
-/* const getErrorMessage = (errors: Array<any>) => {
-  return errors.map(error => {
-   if (error.field === 'email' && error.rule === 'email') {
-      return 'Email';
-    }
-    if (error.field === 'email' && error.rule === 'email') {
-      return 'Password';
-    }
-  }) 
-}; */
-
-  const loginMutation = useMutation<void, AxiosError>(
+  const loginMutation = useMutation<LoginResponse, AxiosError>(
     async () => {
       const response = await axiosInstance.post("/auth/login", {
         email,
@@ -32,11 +22,13 @@ export default function Form() {
       return response.data;
     },
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         setEmail("");
         setPassword("");
         setLogged(true);
         setError(false);
+        const token = data.token ?? "";
+        sessionStorage.setItem("token", token);
       },
       onError: () => {
         setErrorText("Incorrect credentials");
@@ -107,7 +99,9 @@ export default function Form() {
         </button>
       </form>
       <span className="mt-5">{logged && !error ? "logged in ✅" : ""}</span>
-      <span className="mt-5 text-red-500">{!logged && error ? errorText : ""}</span>
+      <span className="mt-5 text-red-500">
+        {!logged && error ? errorText : ""}
+      </span>
     </div>
   );
 }
